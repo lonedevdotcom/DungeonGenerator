@@ -5,16 +5,16 @@ public class MapGenerator : MonoBehaviour {
 	public int mapRows = 5;
 	public int mapColumns = 10;
 
-	private char[,] map;
+	public char[,] map;
 
-	private string boxCharacters;
+	public string boxCharacters;
 	private string[] boxCharacterUpFriends;
 	private string[] boxCharacterDownFriends;
 	private string[] boxCharacterLeftFriends;
 	private string[] boxCharacterRightFriends;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		InitializeBoxCharacters ();
 		InitializeMap ();
 		DisplayMap ();
@@ -59,10 +59,10 @@ public class MapGenerator : MonoBehaviour {
 		}
 
 		Random.seed = System.DateTime.Now.Millisecond;
-		map [1, 1] = '@';
-		map [1, 2] = '@';
-		map [2, 1] = '@';
-		map [2, 2] = '@';
+		// map [1, 1] = '@';
+		// map [1, 2] = '@';
+		// map [2, 1] = '@';
+		// map [2, 2] = '@';
 
 		for (int r = 1; r < mapRows - 1; r++) {
 			for (int c = 1; c < mapColumns - 1; c++) {
@@ -110,50 +110,50 @@ public class MapGenerator : MonoBehaviour {
 		boxCharacterRightFriends = new string[boxCharacters.Length];
 
 		boxCharacterLeftFriends [0] = "O─┌└├┬┴┼"; //    ─
-		boxCharacterLeftFriends [1] = "O│┐┘┤X@"; //     │
-		boxCharacterLeftFriends [2] = "O│┐┘┤X@"; //     ┌
+		boxCharacterLeftFriends [1] = "O│┐┘┤X"; //     │
+		boxCharacterLeftFriends [2] = "O│┐┘┤X"; //     ┌
 		boxCharacterLeftFriends [3] = "O─┌└├┬┴┼"; //    ┐
-		boxCharacterLeftFriends [4] = "O│┐┘┤X@"; //     └
+		boxCharacterLeftFriends [4] = "O│┐┘┤X"; //     └
 		boxCharacterLeftFriends [5] = "O─┌└├┬┴┼"; //    ┘
 		boxCharacterLeftFriends [6] = "O│┐┘┤X"; //      ├
-		boxCharacterLeftFriends [7] = "O─┌└├┬┴┼@"; //   ┤
+		boxCharacterLeftFriends [7] = "O─┌└├┬┴┼"; //   ┤
 		boxCharacterLeftFriends [8] = "O─┌└├┬┴┼"; //    ┬
 		boxCharacterLeftFriends [9] = "O─┌└├┬┴┼"; //    ┴
 		boxCharacterLeftFriends [10] = "O─┌└├┬┴┼"; //   ┼
 
 		boxCharacterRightFriends [0] = "O─┐┘┤┬┴┼"; //    ─
-		boxCharacterRightFriends [1] = "O│┌└├X@"; //     │
-		boxCharacterRightFriends [2] = "O─┐┘┤┬┴┼@"; //   ┌
+		boxCharacterRightFriends [1] = "O│┌└├X"; //     │
+		boxCharacterRightFriends [2] = "O─┐┘┤┬┴┼"; //   ┌
 		boxCharacterRightFriends [3] = "O│┌└├X"; //      ┐
-		boxCharacterRightFriends [4] = "O─┐┘┤┬┴┼@"; //   └
+		boxCharacterRightFriends [4] = "O─┐┘┤┬┴┼"; //   └
 		boxCharacterRightFriends [5] = "O│┌└├X"; //      ┘
-		boxCharacterRightFriends [6] = "O─┐┘┤┬┴┼@"; //   ├
+		boxCharacterRightFriends [6] = "O─┐┘┤┬┴┼"; //   ├
 		boxCharacterRightFriends [7] = "O│┌└├X"; //      ┤
 		boxCharacterRightFriends [8] = "O─┐┘┤┬┴┼"; //    ┬
 		boxCharacterRightFriends [9] = "O─┐┘┤┬┴┼"; //    ┴
 		boxCharacterRightFriends [10] = "O─┐┘┤┬┴┼"; //   ┼
 
-		boxCharacterUpFriends [0] = "O─└┘┴X@"; //       ─
+		boxCharacterUpFriends [0] = "O─└┘┴X"; //       ─
 		boxCharacterUpFriends [1] = "O│┌┐├┤┬┼"; //      │
-		boxCharacterUpFriends [2] = "O─└┘┴X@"; //        ┌
-		boxCharacterUpFriends [3] = "O─└┘┴X@"; //        ┐
+		boxCharacterUpFriends [2] = "O─└┘┴X"; //        ┌
+		boxCharacterUpFriends [3] = "O─└┘┴X"; //        ┐
 		boxCharacterUpFriends [4] = "O│┌┐├┤┬┼"; //     └
 		boxCharacterUpFriends [5] = "O│┌┐├┤┬┼"; //     ┘
 		boxCharacterUpFriends [6] = "O│┌┐├┤┬┼"; //      ├
 		boxCharacterUpFriends [7] = "O│┌┐├┤┬┼"; //      ┤
 		boxCharacterUpFriends [8] = "O─└┘┴X"; //        ┬
-		boxCharacterUpFriends [9] = "O│┌┐├┤┬┼@"; //     ┴
+		boxCharacterUpFriends [9] = "O│┌┐├┤┬┼"; //     ┴
 		boxCharacterUpFriends [10] = "O│┌┐├┤┬┼"; //     ┼
 
-		boxCharacterDownFriends [0] = "O─┌┐┬X@"; //       ─
+		boxCharacterDownFriends [0] = "O─┌┐┬X"; //       ─
 		boxCharacterDownFriends [1] = "O│└┘├┤┴┼"; //      │
-		boxCharacterDownFriends [2] = "O│└┘├┤┴┼@"; //     ┌
-		boxCharacterDownFriends [3] = "O│└┘├┤┴┼@"; //     ┐
+		boxCharacterDownFriends [2] = "O│└┘├┤┴┼"; //     ┌
+		boxCharacterDownFriends [3] = "O│└┘├┤┴┼"; //     ┐
 		boxCharacterDownFriends [4] = "O─┌┐┬X"; //        └
 		boxCharacterDownFriends [5] = "O─┌┐┬X"; //        ┘
 		boxCharacterDownFriends [6] = "O│└┘├┤┴┼"; //      ├
 		boxCharacterDownFriends [7] = "O│└┘├┤┴┼"; //      ┤
-		boxCharacterDownFriends [8] = "O│└┘├┤┴┼@"; //     ┬
+		boxCharacterDownFriends [8] = "O│└┘├┤┴┼"; //     ┬
 		boxCharacterDownFriends [9] = "O─┌┐┬X"; //        ┴
 		boxCharacterDownFriends [10] = "O│└┘├┤┴┼"; //     ┼
 	}

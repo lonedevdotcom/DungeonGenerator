@@ -16,8 +16,6 @@ public class MapGenerator : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		InitializeBoxCharacters ();
-		InitializeMap ();
-		DisplayMap ();
 	}
 	
 	// Update is called once per frame
@@ -36,7 +34,7 @@ public class MapGenerator : MonoBehaviour {
 		Debug.Log (output);
 	}
 
-	private void InitializeMap() {
+	public void InitializeMap() {
 		map = new char[mapRows, mapColumns];
 
 		// Put 'X's in top and bottom rows.
@@ -58,7 +56,10 @@ public class MapGenerator : MonoBehaviour {
 			}
 		}
 
-		Random.seed = System.DateTime.Now.Millisecond;
+		int mapSeed = System.DateTime.Now.Millisecond; 
+		Random.seed = mapSeed;
+		Debug.Log ("Current seed = " + mapSeed);
+
 		// map [1, 1] = '@';
 		// map [1, 2] = '@';
 		// map [2, 1] = '@';
@@ -101,6 +102,83 @@ public class MapGenerator : MonoBehaviour {
 		return validCharacters;
 	}
 
+	public bool[,] TraverseMap() {
+		bool[,] visitedCells = new bool[mapRows, mapColumns];
+		int currentRow = 1;
+		int currentColumn = 1;
+
+		// This will start the recursive loop, updating the visitedCells array.
+		TraverseCells (visitedCells, currentRow, currentColumn);
+
+		return visitedCells;
+	}
+
+
+	private void TraverseCells(bool[,] visitedCells, int row, int column) {
+		if (visitedCells [row, column]) {
+			return;
+		}
+
+		visitedCells [row, column] = true;
+
+		switch (map [row, column]) {
+		case '┌':
+			TraverseCells (visitedCells, row, column + 1);
+			TraverseCells (visitedCells, row + 1, column);
+			break;
+		case '┐':
+			TraverseCells (visitedCells, row + 1, column);
+			TraverseCells (visitedCells, row, column - 1);
+			break;
+		case '─':
+			TraverseCells (visitedCells, row, column - 1);
+			TraverseCells (visitedCells, row, column + 1);
+			break;
+		case '│':
+			TraverseCells (visitedCells, row - 1, column);
+			TraverseCells (visitedCells, row + 1, column);
+			break;
+		case '└':
+			TraverseCells (visitedCells, row, column + 1);
+			TraverseCells (visitedCells, row - 1, column);
+			break;
+		case '┘':
+			TraverseCells (visitedCells, row - 1, column);
+			TraverseCells (visitedCells, row, column - 1);
+			break;
+		case '├':
+			TraverseCells (visitedCells, row - 1, column);
+			TraverseCells (visitedCells, row + 1, column);
+			TraverseCells (visitedCells, row, column + 1);
+			break;
+		case '┤':
+			TraverseCells (visitedCells, row - 1, column);
+			TraverseCells (visitedCells, row + 1, column);
+			TraverseCells (visitedCells, row, column - 1);
+			break;
+		case '┬':
+			TraverseCells (visitedCells, row, column - 1);
+			TraverseCells (visitedCells, row, column + 1);
+			TraverseCells (visitedCells, row + 1, column);
+			break;
+		case '┴':
+			TraverseCells (visitedCells, row, column - 1);
+			TraverseCells (visitedCells, row, column + 1);
+			TraverseCells (visitedCells, row - 1, column);
+			break;
+		case '┼':
+			TraverseCells (visitedCells, row, column - 1);
+			TraverseCells (visitedCells, row, column + 1);
+			TraverseCells (visitedCells, row - 1, column);
+			TraverseCells (visitedCells, row + 1, column);
+			break;
+		case 'O':
+			return; // This is one of those pesky dead-ends!
+		default:
+			Debug.LogError ("No idea how we got here (" + row + "," + column + ") '" + map[row,column]);
+			return;
+		}
+	}
 
 	private void InitializeBoxCharacters() {
 		boxCharacters = "─│┌┐└┘├┤┬┴┼"; 

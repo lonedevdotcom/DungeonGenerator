@@ -3,8 +3,9 @@ using System.Collections;
 
 public class DungeonDisplay : MonoBehaviour {
 	public GameObject[] shapes;
+	public GameObject roomObject;
 	private MapGenerator mapGenerator;
-	public float minimumMazePercentage = 0.8f;
+	public float minimumMazePercentage = 0.6f;
 
 	// Use this for initialization
 	void Start () {
@@ -30,11 +31,13 @@ public class DungeonDisplay : MonoBehaviour {
 				string ch = mapGenerator.map [r, c].ToString();
 				int charPos = mapGenerator.boxCharacters.IndexOf (ch);
 
-				if (charPos < 0 || !visitedCells[r,c]) {
+				if (ch.Equals("@") || ch.Equals("˂") || ch.Equals("˃") || ch.Equals("˅") || ch.Equals("˄")) {
+					Instantiate (roomObject, new Vector3 (r * 3, 0, c * 3), roomObject.transform.rotation);
+				} else	if (charPos < 0 || !visitedCells [r, c]) {
 					continue;
+				} else {
+					Instantiate (shapes [charPos], new Vector3 (r * 3, 0, c * 3), shapes [charPos].transform.rotation);
 				}
-
-				Instantiate (shapes [charPos], new Vector3 (r * 3, 0, c * 3), shapes[charPos].transform.rotation);
 			}
 		}
 	}

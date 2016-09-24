@@ -32,11 +32,11 @@ public class DungeonDisplay : MonoBehaviour {
 				int charPos = mapGenerator.boxCharacters.IndexOf (ch);
 
 				if (ch.Equals("@") || ch.Equals("˂") || ch.Equals("˃") || ch.Equals("˅") || ch.Equals("˄")) {
-					Instantiate (roomObject, new Vector3 (r * 3, 0, c * 3), roomObject.transform.rotation);
+					Instantiate (roomObject, new Vector3 (r * 12, 0, c * 12), roomObject.transform.rotation);
 				} else	if (charPos < 0 || !visitedCells [r, c]) {
 					continue;
 				} else {
-					Instantiate (shapes [charPos], new Vector3 (r * 3, 0, c * 3), shapes [charPos].transform.rotation);
+					Instantiate (shapes [charPos], new Vector3 (r * 12, 0, c * 12), shapes [charPos].transform.rotation);
 				}
 			}
 		}

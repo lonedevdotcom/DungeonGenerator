@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class DungeonDisplay : MonoBehaviour {
 	public GameObject[] shapes;
+
+	public List<GameObject> chamberSections;
+
 	public GameObject roomObject;
 	private MapGenerator mapGenerator;
 	public float minimumMazePercentage = 0.6f;
@@ -31,7 +35,8 @@ public class DungeonDisplay : MonoBehaviour {
 				string ch = mapGenerator.map [r, c].ToString();
 				int charPos = mapGenerator.boxCharacters.IndexOf (ch);
 
-				if (ch.Equals("@") || ch.Equals("˂") || ch.Equals("˃") || ch.Equals("˅") || ch.Equals("˄")) {
+				if (ch.Equals("@") || ch.Equals("˂") || ch.Equals("˃") || ch.Equals("˅") || ch.Equals("˄") ||
+					ch.Equals("╔") || ch.Equals("═") || ch.Equals("╗") || ch.Equals("║") || ch.Equals("╚") || ch.Equals("╝")) {
 					Instantiate (roomObject, new Vector3 (r * 12, 0, c * 12), roomObject.transform.rotation);
 				} else	if (charPos < 0 || !visitedCells [r, c]) {
 					continue;

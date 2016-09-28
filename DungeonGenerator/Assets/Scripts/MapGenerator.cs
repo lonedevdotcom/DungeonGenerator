@@ -157,60 +157,69 @@ public class MapGenerator : MonoBehaviour {
 
 		switch (map [row, column]) {
 		case '┌':
+		case '╔':
 			TraverseCells (visitedCells, row, column + 1);
 			TraverseCells (visitedCells, row + 1, column);
 			break;
 		case '┐':
+		case '╗':
 			TraverseCells (visitedCells, row + 1, column);
 			TraverseCells (visitedCells, row, column - 1);
 			break;
 		case '─':
+		case '˂':
+		case '˃':
 			TraverseCells (visitedCells, row, column - 1);
 			TraverseCells (visitedCells, row, column + 1);
 			break;
 		case '│':
+		case '˄':
+		case '˅':
 			TraverseCells (visitedCells, row - 1, column);
 			TraverseCells (visitedCells, row + 1, column);
 			break;
 		case '└':
+		case '╚':
 			TraverseCells (visitedCells, row, column + 1);
 			TraverseCells (visitedCells, row - 1, column);
 			break;
 		case '┘':
+		case '╝':
 			TraverseCells (visitedCells, row - 1, column);
 			TraverseCells (visitedCells, row, column - 1);
 			break;
 		case '├':
+		case '╟':
 			TraverseCells (visitedCells, row - 1, column);
 			TraverseCells (visitedCells, row + 1, column);
 			TraverseCells (visitedCells, row, column + 1);
 			break;
 		case '┤':
+		case '╢':
 			TraverseCells (visitedCells, row - 1, column);
 			TraverseCells (visitedCells, row + 1, column);
 			TraverseCells (visitedCells, row, column - 1);
 			break;
 		case '┬':
+		case '╤':
 			TraverseCells (visitedCells, row, column - 1);
 			TraverseCells (visitedCells, row, column + 1);
 			TraverseCells (visitedCells, row + 1, column);
 			break;
 		case '┴':
+		case '╧':
 			TraverseCells (visitedCells, row, column - 1);
 			TraverseCells (visitedCells, row, column + 1);
 			TraverseCells (visitedCells, row - 1, column);
 			break;
 		case '┼':
+		case '@':
 			TraverseCells (visitedCells, row, column - 1);
 			TraverseCells (visitedCells, row, column + 1);
 			TraverseCells (visitedCells, row - 1, column);
 			TraverseCells (visitedCells, row + 1, column);
 			break;
 		case 'O':
-		case '˂':
-		case '˃':
-		case '˅':
-		case '˄':
 			return; // This is one of those pesky dead-ends!
 		default:
 			Debug.LogError ("No idea how we got here (" + row + "," + column + ") '" + map[row,column]);

@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DungeonDisplay : MonoBehaviour {
-	public GameObject[] shapes;
+
+	public List<GameObject> dungeonShapes;
 	public float minimumMazePercentage = 0.6f;
 
-	public GameObject roomObject; // Remove this once dictionary is sorted.
+	// public GameObject roomObject; // Remove this once dictionary is sorted.
 	private MapGenerator mapGenerator;
 	private bool[,] visitedCells;
-	private Dictionary<char,GameObject> characterGameObjects = new Dictionary<char,GameObject>();
+	private Dictionary<char,GameObject> dungeonGameObjects = new Dictionary<char,GameObject>();
 
 
 	// Use this for initialization
@@ -17,16 +18,16 @@ public class DungeonDisplay : MonoBehaviour {
 		mapGenerator = GetComponent<MapGenerator> ();
 		visitedCells = new bool[mapGenerator.mapRows, mapGenerator.mapColumns];
 
-		// LoadDungeonCharacterMappings ();
+		LoadDungeonCharacterMappings ();
 		GenerateDungeon ();
 		mapGenerator.DisplayMap ();
 		InstantiateDungeonPieces ();
 	}
 
 	private void LoadDungeonCharacterMappings() {
-		foreach (GameObject dungeonShape in shapes) {
+		foreach (GameObject dungeonShape in dungeonShapes) {
 			char gameObjectCharacter = dungeonShape.GetComponent<DungeonCharacterMapping> ().characterMapping;
-			characterGameObjects [gameObjectCharacter] = dungeonShape;
+			dungeonGameObjects.Add (gameObjectCharacter, dungeonShape);
 		}
 	}
 
@@ -47,17 +48,13 @@ public class DungeonDisplay : MonoBehaviour {
 	private void InstantiateDungeonPieces() {
 		for (int r = 1; r < mapGenerator.mapRows-1; r++) {
 			for (int c = 1; c < mapGenerator.mapColumns - 1; c++) {
-				string ch = mapGenerator.map [r, c].ToString();
-				int charPos = mapGenerator.boxCharacters.IndexOf (ch);
+				char ch = mapGenerator.map [r, c];
 
-				if (ch.Equals("@") || ch.Equals("˂") || ch.Equals("˃") || ch.Equals("˅") || ch.Equals("˄") ||
-					ch.Equals("╔") || ch.Equals("╤") || ch.Equals("╧") || ch.Equals("╗") || ch.Equals("╟") || 
-					ch.Equals("╢") || ch.Equals("╚") || ch.Equals("╝")) {
-					Instantiate (roomObject, new Vector3 (r * 12, 0, c * 12), roomObject.transform.rotation);
-				} else	if (charPos < 0 || !visitedCells [r, c]) {
+				if (!dungeonGameObjects.ContainsKey(ch) || !visitedCells [r, c]) {
 					continue;
 				} else {
-					Instantiate (shapes [charPos], new Vector3 (r * 12, 0, c * 12), shapes [charPos].transform.rotation);
+					GameObject dungeonGameObject = dungeonGameObjects[ch];
+					Instantiate (dungeonGameObject, new Vector3 (r * 12, 0, c * 12), dungeonGameObject.transform.rotation);
 				}
 			}
 		}

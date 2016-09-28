@@ -4,19 +4,34 @@ using System.Collections.Generic;
 
 public class DungeonDisplay : MonoBehaviour {
 	public GameObject[] shapes;
-
-	public List<GameObject> chamberSections;
-
-	public GameObject roomObject;
-	private MapGenerator mapGenerator;
 	public float minimumMazePercentage = 0.6f;
+
+	public GameObject roomObject; // Remove this once dictionary is sorted.
+	private MapGenerator mapGenerator;
+	private bool[,] visitedCells;
+	private Dictionary<char,GameObject> characterGameObjects = new Dictionary<char,GameObject>();
+
 
 	// Use this for initialization
 	void Start () {
 		mapGenerator = GetComponent<MapGenerator> ();
+		visitedCells = new bool[mapGenerator.mapRows, mapGenerator.mapColumns];
 
+		// LoadDungeonCharacterMappings ();
+		GenerateDungeon ();
+		mapGenerator.DisplayMap ();
+		InstantiateDungeonPieces ();
+	}
+
+	private void LoadDungeonCharacterMappings() {
+		foreach (GameObject dungeonShape in shapes) {
+			char gameObjectCharacter = dungeonShape.GetComponent<DungeonCharacterMapping> ().characterMapping;
+			characterGameObjects [gameObjectCharacter] = dungeonShape;
+		}
+	}
+
+	private void GenerateDungeon() {
 		int visitedCellCount = 0;
-		bool[,] visitedCells = new bool[mapGenerator.mapRows, mapGenerator.mapColumns];
 
 		int minimumMazeCells = Mathf.FloorToInt((mapGenerator.mapRows - 2) * (mapGenerator.mapColumns - 2) * minimumMazePercentage);
 
@@ -27,16 +42,17 @@ public class DungeonDisplay : MonoBehaviour {
 			visitedCellCount = GetVisitedCellsCount (visitedCells);
 			Debug.Log ("visited cell count = " + visitedCellCount);
 		}
+	}
 
-		mapGenerator.DisplayMap ();
-
+	private void InstantiateDungeonPieces() {
 		for (int r = 1; r < mapGenerator.mapRows-1; r++) {
 			for (int c = 1; c < mapGenerator.mapColumns - 1; c++) {
 				string ch = mapGenerator.map [r, c].ToString();
 				int charPos = mapGenerator.boxCharacters.IndexOf (ch);
 
 				if (ch.Equals("@") || ch.Equals("˂") || ch.Equals("˃") || ch.Equals("˅") || ch.Equals("˄") ||
-					ch.Equals("╔") || ch.Equals("═") || ch.Equals("╗") || ch.Equals("║") || ch.Equals("╚") || ch.Equals("╝")) {
+					ch.Equals("╔") || ch.Equals("╤") || ch.Equals("╧") || ch.Equals("╗") || ch.Equals("╟") || 
+					ch.Equals("╢") || ch.Equals("╚") || ch.Equals("╝")) {
 					Instantiate (roomObject, new Vector3 (r * 12, 0, c * 12), roomObject.transform.rotation);
 				} else	if (charPos < 0 || !visitedCells [r, c]) {
 					continue;

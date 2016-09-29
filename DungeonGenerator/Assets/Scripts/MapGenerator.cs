@@ -74,6 +74,34 @@ public class MapGenerator : MonoBehaviour {
 				map [r, c] = validCharacters [Random.Range (0, validCharacters.Length)];
 			}
 		}
+
+		SortOutDeadEnds ();
+	}
+
+	private void SortOutDeadEnds() {
+		for (int r = 1; r < mapRows - 1; r++) {
+			for (int c = 1; c < mapColumns - 1; c++) {
+				if (map [r, c] == 'O') {
+					Debug.Log ("Found dead end at " + r + "," + c);
+
+					if ("─┐┘┤┬┴┼˂".Contains (map [r, c + 1].ToString ())) {
+						Debug.Log ("Right");
+						map [r, c] = '►';
+					} else if ("─┌└├┬┴┼˃".Contains (map [r, c - 1].ToString ())) {
+						Debug.Log ("Left");
+						map [r, c] = '◄';
+					} else if ("│┌┐├┤┬┼˅".Contains (map [r - 1, c].ToString ())) {
+						Debug.Log ("Top");
+						map [r, c] = '▲';
+					} else if ("│└┘├┤┴┼˄".Contains (map [r + 1, c].ToString ())) {
+						Debug.Log ("Bottom");
+						map [r, c] = '▼';
+					} else {
+						Debug.Log("Nothing!");
+					}
+				}
+			}
+		}
 	}
 
 	private void CreateRoom() {

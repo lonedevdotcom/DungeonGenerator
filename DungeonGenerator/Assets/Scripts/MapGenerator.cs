@@ -56,7 +56,7 @@ public class MapGenerator : MonoBehaviour {
 			}
 		}
 
-		int mapSeed = System.DateTime.Now.Millisecond; 
+		int mapSeed = System.DateTime.Now.Millisecond;  // 147; 
 		Random.seed = mapSeed;
 		Debug.Log ("Current seed = " + mapSeed);
 
@@ -82,22 +82,30 @@ public class MapGenerator : MonoBehaviour {
 		for (int r = 1; r < mapRows - 1; r++) {
 			for (int c = 1; c < mapColumns - 1; c++) {
 				if (map [r, c] == 'O') {
-					Debug.Log ("Found dead end at " + r + "," + c);
+					//Debug.Log ("Found dead end at " + r + "," + c);
 
-					if ("─┐┘┤┬┴┼˂".Contains (map [r, c + 1].ToString ())) {
-						Debug.Log ("Right");
-						map [r, c] = '►';
-					} else if ("─┌└├┬┴┼˃".Contains (map [r, c - 1].ToString ())) {
-						Debug.Log ("Left");
+					if ("─┐┘┤┬┴┼˂".Contains (map [r, c + 1].ToString ()) && !"─┌└├┬┴┼˃".Contains (map [r, c - 1].ToString ()) && !"│┌┐├┤┬┼˅".Contains (map [r - 1, c].ToString ()) && !"│└┘├┤┴┼˄".Contains (map [r + 1, c].ToString ()) ){
+						//RIGHT_!Left-!Top-!Bottom
+							Debug.Log ("Right at " + r + "," + c);
+							map [r, c] = '►';
+						
+					} else if ("─┌└├┬┴┼˃".Contains (map [r, c - 1].ToString ()) && !"│┌┐├┤┬┼˅".Contains (map [r - 1, c].ToString ()) && !"─┐┘┤┬┴┼˂".Contains (map [r, c + 1].ToString ()) && !"│└┘├┤┴┼˄".Contains (map [r + 1, c].ToString ())) {
+						//LEFT_!Top-!Right-!Bottom
+						//Debug.Log ("Left");
 						map [r, c] = '◄';
-					} else if ("│┌┐├┤┬┼˅".Contains (map [r - 1, c].ToString ())) {
-						Debug.Log ("Top");
+
+					} else if ("│┌┐├┤┬┼˅".Contains (map [r - 1, c].ToString ()) && !"─┐┘┤┬┴┼˂".Contains (map [r, c + 1].ToString ()) && !"─┐┘┤┬┴┼˂".Contains (map [r, c + 1].ToString ()) && !"│└┘├┤┴┼˄".Contains (map [r + 1, c].ToString ())) {
+						//TOP_!Left-!Right-!Bottom
+						//Debug.Log ("Top");
 						map [r, c] = '▲';
-					} else if ("│└┘├┤┴┼˄".Contains (map [r + 1, c].ToString ())) {
-						Debug.Log ("Bottom");
+
+					} else if ("│└┘├┤┴┼˄".Contains (map [r + 1, c].ToString ()) && !"─┐┘┤┬┴┼˂".Contains (map [r, c + 1].ToString ()) && !"│┌┐├┤┬┼˅".Contains (map [r - 1, c].ToString ()) && !"─┐┘┤┬┴┼˂".Contains (map [r, c + 1].ToString ())) {
+						//DOWN_!Left-!Top-!Right
+						//Debug.Log ("Bottom");
 						map [r, c] = '▼';
+
 					} else {
-						Debug.Log("Nothing!");
+						Debug.Log("Special Spot! at " + r + "," + c);
 					}
 				}
 			}
@@ -110,7 +118,7 @@ public class MapGenerator : MonoBehaviour {
 		// ╔ ═ ╗ ║ ╚ ╝
 		map [startRow, startColumn] = '╔';
 		map [startRow, startColumn+1] = '╤';
-		map [startRow, startColumn+2] = '╤';
+		map [startRow, startColumn+2] = '˄';
 		map [startRow, startColumn+3] = '╤';
 		map [startRow, startColumn+4] = '╗';
 
@@ -133,7 +141,7 @@ public class MapGenerator : MonoBehaviour {
 		map [startRow+3, startColumn+4] = '╢';
 
 		map [startRow+4, startColumn] = '╚';
-		map [startRow+4, startColumn+1] = '╧';
+		map [startRow+4, startColumn+1] = '˅';
 		map [startRow+4, startColumn+2] = '╧';
 		map [startRow+4, startColumn+3] = '╧';
 		map [startRow+4, startColumn+4] = '╝';
@@ -177,6 +185,8 @@ public class MapGenerator : MonoBehaviour {
 
 
 	private void TraverseCells(bool[,] visitedCells, int row, int column) {
+		//row = horizontal
+		//columns = vertical
 		if (visitedCells [row, column]) {
 			return;
 		}
